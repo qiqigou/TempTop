@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +12,18 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            var test = new Class1();
-            test.Test();
+
+            var path = Path.Combine(@"E:\ASUS\Desktop\GitWork\TempTop\ConsoleApp1", "模板语法.cshtml");
+            var data = Path.Combine(@"E:\ASUS\Desktop\GitWork\TempTop\ConsoleApp1", "模板数据.json");
+            using (var reader = new StreamReader(path))
+            {
+                var temp = reader.ReadToEnd();
+                var manager = new TempManager();
+                var build = manager.GetTempBuild(temp);
+                build.LoadFromFile(data);
+                var str = build.Execute();
+                
+            }
 
         }
     }

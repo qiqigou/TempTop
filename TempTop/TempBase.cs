@@ -7,29 +7,17 @@ using System.Text;
 
 namespace TempTop
 {
-    public abstract class TempBase
+    /// <summary>
+    /// 根据C#代码抽象类
+    /// </summary>
+    public abstract class TempBase : ITempBuild
     {
+        public StringBuilder builder { get; } = new StringBuilder();
+        protected JObject _data { get; private set; }
 
-        protected JObject _data { get; set; }
-        protected StringBuilder builder { get; }
-        public string outputPath { get; set; } = @"C:\Users\Administrator\Desktop\model.cs";
+        public TempBase() { }
 
-        #region 构造
-        public TempBase()
-        {
-            builder = new StringBuilder();
-        }
-
-        public TempBase(object obj) : this()
-        {
-            _data = JObject.FromObject(obj);
-        }
-
-        public TempBase(string json) : this()
-        {
-            _data = JObject.Parse(json);
-        }
-
+        #region 加载data
         public void LoadFromFile(string path)
         {
             _data = JObject.Parse(Reader(path));
@@ -47,7 +35,6 @@ namespace TempTop
             _data = JObject.FromObject(obj);
             Clear();
         }
-        #endregion
 
         /// <summary>
         /// 读
@@ -62,17 +49,9 @@ namespace TempTop
             }
         }
 
-        /// <summary>
-        /// 写
-        /// </summary>
-        /// <param name="path"></param>
-        private void Writer(string path)
-        {
-            using (var writer = new StreamWriter(path))
-            {
-                writer.Write(this.builder.ToString());
-            }
-        }
+        #endregion
+
+        #region 生成逻辑
 
         /// <summary>
         /// 表达式输出
@@ -142,29 +121,31 @@ namespace TempTop
         }
 
         /// <summary>
+        /// 清空
+        /// </summary>
+        private void Clear()
+        {
+            this.builder.Clear();
+        }
+
+        /// <summary>
         /// 生成逻辑
         /// </summary>
         protected abstract void Invoke();
+
+        #endregion
 
         /// <summary>
         /// 执行
         /// </summary>
         /// <returns></returns>
-        public void Execute()
+        public string Execute()
         {
             Clear();
-            LoadFromFile(@"C:\Users\Administrator\source\repos\TempTop\TempTop\Temp\模板数据.json");
             Invoke();
             builder.Remove(builder.Length - 2, 2);
-            Writer(outputPath);
+            return builder.ToString();
         }
 
-        /// <summary>
-        /// 清空
-        /// </summary>
-        public void Clear()
-        {
-            this.builder.Clear();
-        }
     }
 }

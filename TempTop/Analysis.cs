@@ -8,9 +8,11 @@ using System.Text.RegularExpressions;
 
 namespace TempTop
 {
+    /// <summary>
+    /// 将模板解析为C#代码
+    /// </summary>
     public class Analysis
     {
-        public string tempPath { get; set; }
         protected StringBuilder exprBuilder { get; } = new StringBuilder();
         protected StringBuilder builder_result { get; } = new StringBuilder();
         protected StringBuilder builder_fun1 { get; } = new StringBuilder();
@@ -18,10 +20,27 @@ namespace TempTop
         protected StringBuilder builder_fun3 { get; } = new StringBuilder();
         protected StringBuilder builder_return { get; } = new StringBuilder();
 
-        public string Build()
+        public string Build(string temp)
         {
             builder_return.Clear();
-            using (var reader = new StreamReader(tempPath))
+            builder_return.Append("namespace TempTop");
+            builder_return.Append("{");
+            builder_return.Append("    public class CreateTemp : TempBase");
+            builder_return.Append("    {");
+            builder_return.Append("        protected override void Invoke()");
+            builder_return.Append("        {");
+            builder_return.Append(Invoke(temp));
+            builder_return.Append("        }");
+            builder_return.Append("    }");
+            builder_return.Append("}");
+            return builder_return.ToString();
+        }
+
+        private string Invoke(string temp)
+        {
+            builder_fun3.Clear();
+            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(temp));
+            using (var reader = new StreamReader(stream))
             {
                 do
                 {
@@ -69,10 +88,10 @@ namespace TempTop
                     {
                         result = Append(input);
                     }
-                    builder_return.Append(result);
+                    builder_fun3.Append(result);
                 } while (true);
             }
-            return builder_return.ToString();
+            return builder_fun3.ToString();
         }
 
         protected string Output(string input)
@@ -202,7 +221,6 @@ namespace TempTop
             builder_result.Clear();
             builder_fun1.Clear();
             builder_fun2.Clear();
-            builder_fun3.Clear();
         }
 
         private string ConverFormat(string input)

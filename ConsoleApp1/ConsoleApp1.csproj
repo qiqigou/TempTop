@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="模板数据.json" />
+    <None Include="模板语法.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TempTop\TempTop.csproj">

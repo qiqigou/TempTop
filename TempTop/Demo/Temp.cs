@@ -1,15 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-
-namespace TempTop
+﻿namespace TempTop
 {
     public class Temp: TempBase
     {
-        //protected delegate void Each_Del(JToken token, Action<JToken, int> action);
-        //protected delegate void Output_Del(string formate, params JToken[] values);
-        //protected delegate void Append_Del(string value = default);
-        //protected delegate bool Compare_Del(object obj1, string sign, object obj2);
-        //JObject _data, Each_Del Each, Output_Del Output, Append_Del Append, Compare_Del Compare
         protected override void Invoke()
         {
             Each(_data["usings"], (val, key) =>
