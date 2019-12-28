@@ -12,7 +12,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-
+            var baseUrl = Directory.GetCurrentDirectory();
             var path = Path.Combine(@"E:\ASUS\Desktop\GitWork\TempTop\ConsoleApp1", "模板语法.cshtml");
             var data = Path.Combine(@"E:\ASUS\Desktop\GitWork\TempTop\ConsoleApp1", "模板数据.json");
             using (var reader = new StreamReader(path))
@@ -22,7 +22,7 @@ namespace ConsoleApp1
                 var build = manager.GetTempBuild(temp);
                 build.LoadFromFile(data);
                 var str = build.Execute();
-                
+
             }
 
         }

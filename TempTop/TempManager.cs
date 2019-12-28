@@ -12,8 +12,6 @@ namespace TempTop
 {
     public class TempManager
     {
-        public static string baseUrl = Directory.GetCurrentDirectory();
-
         public ITempBuild GetTempBuild(string temp)
         {
             var baseUrl = Directory.GetCurrentDirectory();
