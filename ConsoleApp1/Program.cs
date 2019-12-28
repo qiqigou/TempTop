@@ -13,17 +13,14 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             var baseUrl = Directory.GetCurrentDirectory();
-            var path = Path.Combine(@"E:\ASUS\Desktop\GitWork\TempTop\ConsoleApp1", "模板语法.cshtml");
+            var temp = Path.Combine(@"E:\ASUS\Desktop\GitWork\TempTop\ConsoleApp1", "模板语法.cshtml");
             var data = Path.Combine(@"E:\ASUS\Desktop\GitWork\TempTop\ConsoleApp1", "模板数据.json");
-            using (var reader = new StreamReader(path))
-            {
-                var temp = reader.ReadToEnd();
-                var manager = new TempManager();
-                var build = manager.GetTempBuild(temp);
-                build.LoadFromFile(data);
-                var str = build.Execute();
 
-            }
+            var manager = new TempManager();
+            manager.LoadFromFile(temp);
+            var build = manager.GetTempBuild();
+            build.LoadFromFile(data);
+            var str = build.Execute();
 
         }
     }

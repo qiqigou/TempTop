@@ -12,7 +12,9 @@ namespace TempTop
 {
     public class TempManager
     {
-        public ITempBuild GetTempBuild(string temp)
+        private StringBuilder builder = new StringBuilder();
+
+        public ITempBuild GetTempBuild()
         {
             ITempBuild build = default;
             using (var complier = new CSharpCodeProvider())
@@ -25,7 +27,7 @@ namespace TempTop
                 dll.GenerateExecutable = false;
                 dll.GenerateInMemory = true;
 
-                var cr = complier.CompileAssemblyFromSource(dll, GetCode(temp));
+                var cr = complier.CompileAssemblyFromSource(dll, GetCode());
                 var error = cr.Errors.HasErrors;
                 if (error == false)
                 {
@@ -36,10 +38,25 @@ namespace TempTop
             }
         }
 
-        private string GetCode(string temp)
+        public void LoadFromFile(string path)
+        {
+            builder.Clear();
+            using (var reader = new StreamReader(path))
+            {
+                builder.Append(reader.ReadToEnd());
+            }
+        }
+
+        public void LoadFromString(string temp)
+        {
+            builder.Clear();
+            builder.Append(temp);
+        }
+
+        private string GetCode()
         {
             var ana = new Analysis();
-            return ana.Build(temp);
+            return ana.Build(builder.ToString());
         }
 
     }
