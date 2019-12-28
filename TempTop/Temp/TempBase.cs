@@ -153,7 +153,7 @@ namespace TempTop
         public void Execute()
         {
             Clear();
-            LoadFromFile(@"C:\Users\Administrator\source\repos\cs-scriptTest\cs-scriptTest\Temp\模板数据.json");
+            LoadFromFile(@"C:\Users\Administrator\source\repos\TempTop\TempTop\Temp\模板数据.json");
             Invoke();
             Writer(outputPath);
         }

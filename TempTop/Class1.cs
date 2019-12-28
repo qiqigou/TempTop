@@ -40,7 +40,7 @@ namespace TempTop
         {
             var builder = new StringBuilder();
             var ana = new Analysis();
-            ana.tempPath = @"C:\Users\Administrator\source\repos\cs-scriptTest\cs-scriptTest\Temp\模板语法.cshtml";
+            ana.tempPath = @"C:\Users\Administrator\source\repos\TempTop\TempTop\Temp\模板语法.cshtml";
             var code = ana.Build();
 
             builder.Append("namespace TempTop");
@@ -96,6 +96,7 @@ namespace TempTop
             string outputDll = @"C:\Users\Administrator\Desktop\code.dll";
             string errMsg = CompileFromFile(GetCode(), referenceAssemblyNames, outputDll);
         }
+
 
     }
 
