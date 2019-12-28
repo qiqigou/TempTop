@@ -1,52 +1,52 @@
 {
-	"usings": [
-		"System",
-		"System.Collections.Generic",
-		"System.ComponentModel.DataAnnotations",
-		"System.ComponentModel.DataAnnotations.Schema",
-		"System.Runtime.Serialization",
-		"System.ComponentModel"
-	],
-	"namespace": "ZxSoftERPSC.Model",
-	"class": "ap_ap",
-	"forkey": [
-		"employee_ee",
-		"settlemode_sm",
-		"syscoin_sc",
-		"vendor_vd"
-	],
-	"pkforkey": [
-		"apc_apc",
-		"apc2_apc2"
-	],
-	"fields": [
-		{
-			"name": "ap_ccode",
-			"type": "string",
-			"default": "string.Empty",
-			"desc": "单号",
-			"key": 0
-		},
-		{
-			"name": "ap_ddate",
-			"type": "Nullable<DateTime>",
-			"default": "",
-			"desc": "日期",
-			"key": -1
-		},
-		{
-			"name": "ee_cid",
-			"type": "string",
-			"default": "string.Empty",
-			"desc": "经手人",
-			"key": -1
-		},
-		{
-			"name": "vd_cid",
-			"type": "string",
-			"default": "string.Empty",
-			"desc": "供应商编码",
-			"key": -1
-		}
-	]
+  "usings": [
+    "System",
+    "System.Collections.Generic",
+    "System.ComponentModel.DataAnnotations",
+    "System.ComponentModel.DataAnnotations.Schema",
+    "System.Runtime.Serialization",
+    "System.ComponentModel"
+  ],
+  "namespace": "ZxSoftERPSC.Model",
+  "class": "ap_ap",
+  "forkey": [
+    "employee_ee",
+    "settlemode_sm",
+    "syscoin_sc",
+    "vendor_vd"
+  ],
+  "pkforkey": [
+    "apc_apc",
+    "apc2_apc2"
+  ],
+  "fields": [
+    {
+      "name": "ap_ccode",
+      "type": "string",
+      "default": "string.Empty",
+      "desc": "单号",
+      "key": 0
+    },
+    {
+      "name": "ap_ddate",
+      "type": "Nullable<DateTime>",
+      "default": "",
+      "desc": "日期",
+      "key": -1
+    },
+    {
+      "name": "ee_cid",
+      "type": "string",
+      "default": "string.Empty",
+      "desc": "经手人",
+      "key": -1
+    },
+    {
+      "name": "vd_cid",
+      "type": "string",
+      "default": "string.Empty",
+      "desc": "供应商编码",
+      "key": -1
+    }
+  ]
 }

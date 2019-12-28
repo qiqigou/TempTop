@@ -20,7 +20,6 @@ namespace TempTop
                 dll.ReferencedAssemblies.Add("NewTonsoft.Json.dll");
                 dll.ReferencedAssemblies.Add("TempTop.dll");
                 dll.ReferencedAssemblies.Add("System.Core.dll");
-                dll.ReferencedAssemblies.Add("System.Data.dll");
                 dll.GenerateExecutable = false;
                 dll.GenerateInMemory = true;
 
@@ -56,49 +55,5 @@ namespace TempTop
             return builder.ToString();
         }
 
-        /// <summary>
-        /// 从文件编译
-        /// </summary>
-        /// <param name="files">要编译的代码文件集合</param>
-        /// <param name="referenceAssemblyNames">引用程序集名称集合</param>
-        /// <param name="outputAssembly">输出dll名称</param>
-        /// <returns>返回异常信息</returns>
-        public static string CompileFromFile(string code, string[] referenceAssemblyNames, string outputAssembly)
-        {
-            CSharpCodeProvider codeProvider = new CSharpCodeProvider();
-            CompilerParameters compilerParameters = new CompilerParameters(referenceAssemblyNames, outputAssembly);
-            //CompilerResults complierResult = codeProvider.CompileAssemblyFromFile(compilerParameters, files);
-            CompilerResults complierResult = codeProvider.CompileAssemblyFromSource(compilerParameters, code);
-            if (complierResult.Errors.HasErrors)
-            {
-                StringBuilder message = new StringBuilder();
-                foreach (CompilerError err in complierResult.Errors)
-                {
-                    message.AppendFormat("(FileName:{0},ErrLine:{1}): error {2}: {3}", err.FileName, err.Line, err.ErrorNumber, err.ErrorText);
-                }
-                return message.ToString();
-            }
-            return string.Empty;
-        }
-
-
-        public void Test2()
-        {
-            string[] referenceAssemblyNames = new string[]
-                {
-                    "System.dll",
-                    "NewTonsoft.Json.dll",
-                    "TempTop.dll",
-                    "System.Core.dll",
-                    "System.Data.dll"
-                };
-            //输出dll
-            string outputDll = @"C:\Users\Administrator\Desktop\code.dll";
-            string errMsg = CompileFromFile(GetCode(), referenceAssemblyNames, outputDll);
-        }
-
-
     }
-
-
 }

@@ -155,6 +155,7 @@ namespace TempTop
             Clear();
             LoadFromFile(@"C:\Users\Administrator\source\repos\TempTop\TempTop\Temp\模板数据.json");
             Invoke();
+            builder.Remove(builder.Length - 2, 2);
             Writer(outputPath);
         }
 
