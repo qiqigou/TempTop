@@ -14,7 +14,6 @@ namespace TempTop
     {
         public ITempBuild GetTempBuild(string temp)
         {
-            var baseUrl = Directory.GetCurrentDirectory();
             ITempBuild build = default;
             using (var complier = new CSharpCodeProvider())
             {
