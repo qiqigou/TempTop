@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
@@ -13,20 +14,22 @@ namespace ConsoleApp1
     class Program
     {
         public static Assembly Assembly;
-        public static Type Type;
 
 
         static void Main(string[] args)
         {
             Assembly = GetAssembly();
-            Type = Assembly.GetType("ConsoleApp1.Users");
+            Type type = Assembly.GetType("ConsoleApp1.Users");
 
             using (var db = new DALContext())
             {
-                var user = db.Set(Type).Find("100");
-                Console.WriteLine(user);
+                var user = db.Set(type).Find("100");
+                var json = JsonConvert.SerializeObject(user, Formatting.Indented);
+                Console.WriteLine(json);
             }
             Console.Read();
+
+            
         }
 
 
@@ -48,6 +51,23 @@ namespace ConsoleApp1
 
             return CSharpHelper.GetAssembly(code, dlls);
         }
+
+        public List<dynamic> Get(Type type)
+        {
+            var mk = typeof(Program).GetMethod("GetList").MakeGenericMethod(type);
+            var pro = new Program();
+            var list = mk.Invoke(pro, null) as List<dynamic>;
+            var json = JsonConvert.SerializeObject(list, Formatting.Indented);
+            Console.WriteLine(json);
+            return list;
+        }
+
+
+        public List<T> GetList<T>(DALContext db) where T : class
+        {
+            return db.Set<T>().ToList();
+        }
+
 
     }
 }

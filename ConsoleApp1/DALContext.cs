@@ -18,10 +18,10 @@ namespace ConsoleApp1
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Configurations.AddFromAssembly(Program.Assembly);
-            //Type type = Program.Assembly.GetType("ConsoleApp1.Users");
+            Type type = Program.Assembly.GetType("ConsoleApp1.Users");
             //var obj = new EntityTypeConfiguration<Users>();
 
-            var obj = GetType(Program.Type);
+            var obj = GetEntityType(type);
             modelBuilder.Configurations.Add(obj);
             base.OnModelCreating(modelBuilder);
         }
@@ -33,7 +33,7 @@ namespace ConsoleApp1
             return new EntityTypeConfiguration<T>();
         }
 
-        private dynamic GetType(Type type)
+        private dynamic GetEntityType(Type type)
         {
             MethodInfo mi = this.GetType().GetMethod("CreateEntity").MakeGenericMethod(type);
             dynamic obj = mi.Invoke(this, null);
