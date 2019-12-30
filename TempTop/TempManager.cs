@@ -16,26 +16,15 @@ namespace TempTop
 
         public ITempBuild GetTempBuild()
         {
-            ITempBuild build = default;
-            using (var complier = new CSharpCodeProvider())
-            {
-                var dll = new CompilerParameters();
-                dll.ReferencedAssemblies.Add("System.dll");
-                dll.ReferencedAssemblies.Add("NewTonsoft.Json.dll");
-                dll.ReferencedAssemblies.Add("TempTop.dll");
-                dll.ReferencedAssemblies.Add("System.Core.dll");
-                dll.GenerateExecutable = false;
-                dll.GenerateInMemory = true;
+            var dlls = new string[] {
+                "System.dll",
+                "NewTonsoft.Json.dll",
+                "TempTop.dll",
+                "System.Core.dll"
+            };
+            var assembly = CSharpHelper.GetAssembly(GetCode(), dlls);
 
-                var cr = complier.CompileAssemblyFromSource(dll, GetCode());
-                var error = cr.Errors.HasErrors;
-                if (error == false)
-                {
-                    Assembly objAssembly = cr.CompiledAssembly;
-                    build = objAssembly.CreateInstance("TempTop.CreateTemp") as ITempBuild;
-                }
-                return build;
-            }
+            return assembly.CreateInstance("TempTop.CreateTemp") as ITempBuild;
         }
 
         public void LoadFromFile(string path)

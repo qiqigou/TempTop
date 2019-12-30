@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSharpHelper.cs" />
     <Compile Include="TempManager.cs" />
     <Compile Include="Extension\ListExtension.cs" />
     <Compile Include="ITempBuild.cs" />

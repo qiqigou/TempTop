@@ -4,33 +4,9 @@ using {{val}};
 
 namespace {{_data.namespace}}
 {
-	/// <summary>
-	/// 实体类
-	/// </summary>
-	[DataContract]
-	{{each _data.forkey val key}}
-	[KnownType(typeof({{val}}))]
-	{{/each}}
-	public class {{_data.class}} : ModelBase
+	public class {{_data.class}}
 	{
-		public {{_data.class}}()
-		{
-			{{each _data.fields val key}}
-			{{if val.default != ""}}
-			this.{{val.name}} = {{val.default}};
-			{{/if}}
-			{{/each}}
-			{{each _data.pkforkey val key}}
-			this.{{val}} = new HashSet<{{val}}>();
-			{{/each}}
-		}
-		
 		{{each _data.fields val key}}
-		/// <summary>
-		/// {{val.desc}}
-		/// </summary>
-		[Description("{{val.desc}}")]
-		[DataMenber]
 		{{if val.key == 0}}
 		[Key]
 		{{else if val.key > 0}}
@@ -38,14 +14,6 @@ namespace {{_data.namespace}}
 		{{/if}}
 		public {{val.type}} {{val.name}} { get; set; }
 		
-		{{/each}}
-		{{each _data.forkey val key}}
-		public virtual {{val}} {{val}} { get; set; }
-		
-		{{/each}}
-		{{each _data.pkforkey val key}}
-		public virtual ICollaction<{{val}}> {{val}} { get; set; }
-        
 		{{/each}}
 	}
 }
