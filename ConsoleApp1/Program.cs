@@ -15,9 +15,13 @@ namespace ConsoleApp1
     {
         public static Assembly Assembly;
 
+        /// <summary>
+        /// 取得Model程序集
+        /// </summary>
+        /// <returns></returns>
         public static Assembly GetAssembly()
         {
-            var baseUrl = Directory.GetCurrentDirectory();
+            //var baseUrl = Directory.GetCurrentDirectory();
             var temp = Path.Combine(@"..\..\", "模板语法.cshtml");
             var data = Path.Combine(@"..\..\", "模板数据.json");
 
@@ -38,11 +42,11 @@ namespace ConsoleApp1
         {
             Assembly = GetAssembly();
             Type type = Assembly.GetType("ConsoleApp1.Users");
-            var prm = new Program();
 
+            var helper = new DBHelper();
             using (var db = new DALContext())
             {
-                var list = prm.Filter(db, type);
+                var list = helper.Filter(db, type);
 
                 var json = JsonConvert.SerializeObject(list, Formatting.Indented);
                 Console.WriteLine(json);
@@ -51,19 +55,6 @@ namespace ConsoleApp1
         }
 
 
-        public dynamic Filter(DALContext db, Type type)
-        {
-            var mk = typeof(Program).GetMethod("GetList").MakeGenericMethod(type);
-            var list = mk.Invoke(this, new object[] { db });
-            return list;
-        }
-
-
-        public List<T> GetList<T>(DALContext db) where T : class
-        {
-            var list = db.Set<T>().ToList();
-            return list;
-        }
 
 
     }
