@@ -30,7 +30,7 @@
     {
       "name": "ap_ddate",
       "type": "Nullable<DateTime>",
-      "default": "",
+      "default": null,
       "desc": "日期",
       "key": -1
     },

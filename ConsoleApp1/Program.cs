@@ -19,6 +19,7 @@ namespace ConsoleApp1
             var manager = new TempManager();
             manager.LoadFromFile(temp);
             var build = manager.GetTempBuild();
+
             build.LoadFromFile(data);
             var str = build.Execute();
 
