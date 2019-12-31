@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace ConsoleApp1
 {
-    public class Usersc: ModelBase
+    public class People: ModelBase
     {
         [Key]
         public string userid { get; set; }
