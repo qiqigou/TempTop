@@ -1,6 +1,7 @@
 {
   "usings": [
-    "System.ComponentModel.DataAnnotations"
+    "System.ComponentModel.DataAnnotations",
+    "ConsoleApp1"
   ],
   "namespace": "ConsoleApp1",
   "class": "Users",

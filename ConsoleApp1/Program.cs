@@ -46,7 +46,7 @@ namespace ConsoleApp1
             var helper = new DBHelper();
             using (var db = new DALContext())
             {
-                var list = helper.Filter(db, type);
+                var list = helper.Filter(db, type, "userid=\"100\"");
 
                 var json = JsonConvert.SerializeObject(list, Formatting.Indented);
                 Console.WriteLine(json);

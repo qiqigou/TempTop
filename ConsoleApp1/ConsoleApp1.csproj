@@ -85,6 +85,8 @@
   <ItemGroup>
     <Compile Include="DALContext.cs" />
     <Compile Include="DBHelper.cs" />
+    <Compile Include="DynamicLibrary.cs" />
+    <Compile Include="ModelBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
