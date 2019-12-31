@@ -15,24 +15,6 @@ namespace ConsoleApp1
     {
         public static Assembly Assembly;
 
-
-        static void Main(string[] args)
-        {
-            Assembly = GetAssembly();
-            Type type = Assembly.GetType("ConsoleApp1.Users");
-
-            using (var db = new DALContext())
-            {
-                var user = db.Set(type).Find("100");
-                var json = JsonConvert.SerializeObject(user, Formatting.Indented);
-                Console.WriteLine(json);
-            }
-            Console.Read();
-
-            
-        }
-
-
         public static Assembly GetAssembly()
         {
             var baseUrl = Directory.GetCurrentDirectory();
@@ -52,20 +34,35 @@ namespace ConsoleApp1
             return CSharpHelper.GetAssembly(code, dlls);
         }
 
-        public List<dynamic> Get(Type type)
+        static void Main(string[] args)
+        {
+            Assembly = GetAssembly();
+            Type type = Assembly.GetType("ConsoleApp1.Users");
+            var prm = new Program();
+
+            using (var db = new DALContext())
+            {
+                var list = prm.Filter(db, type);
+
+                var json = JsonConvert.SerializeObject(list, Formatting.Indented);
+                Console.WriteLine(json);
+            }
+            Console.Read();
+        }
+
+
+        public dynamic Filter(DALContext db, Type type)
         {
             var mk = typeof(Program).GetMethod("GetList").MakeGenericMethod(type);
-            var pro = new Program();
-            var list = mk.Invoke(pro, null) as List<dynamic>;
-            var json = JsonConvert.SerializeObject(list, Formatting.Indented);
-            Console.WriteLine(json);
+            var list = mk.Invoke(this, new object[] { db });
             return list;
         }
 
 
         public List<T> GetList<T>(DALContext db) where T : class
         {
-            return db.Set<T>().ToList();
+            var list = db.Set<T>().ToList();
+            return list;
         }
 
 
