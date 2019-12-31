@@ -44,16 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extension\TestTemp.cs" />
+    <Compile Include="CSharpHelper.cs" />
     <Compile Include="TempManager.cs" />
     <Compile Include="Extension\ListExtension.cs" />
     <Compile Include="ITempBuild.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Analysis.cs" />
+    <Compile Include="Demo\Temp.cs" />
     <Compile Include="TempBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Demo\模板数据.json" />
+    <None Include="Demo\模板语法.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
