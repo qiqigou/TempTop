@@ -109,5 +109,11 @@ namespace TempTop
             return builder.ToString();
         }
 
+        public string Execute(object data)
+        {
+            this.LoadFromObject(data);
+            return this.Execute();
+        }
+
     }
 }

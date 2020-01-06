@@ -14,6 +14,13 @@ namespace TempTop
     {
         private StringBuilder builder = new StringBuilder();
 
+        public TempManager() { }
+
+        public TempManager(string path)
+        {
+            this.LoadFromFile(path);
+        }
+
         public ITempBuild GetTempBuild()
         {
             var dlls = new string[] {
