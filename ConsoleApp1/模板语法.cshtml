@@ -11,6 +11,8 @@ namespace {{_data.namespace}}
 		[Key]
 		{{else if val.key > 0}}
 		[Key, Column(Order = {{val.key}})]
+        {{else}}
+        {{key}}哈哈哈哈哈
 		{{/if}}
 		public {{val.type}} {{val.name}} { get; set; }
 		

@@ -48,13 +48,8 @@ namespace TempTop
                     var input = reader.ReadLine();
                     if (input == null) break;
 
-                    //表达式输出
-                    if (Regex.IsMatch(input, @"{{(\w+(\[\d\])*)([.]\w+(\[\d\])*)*}}"))
-                    {
-                        result = Output(ConverFormat(input));
-                    }
                     //each开始
-                    else if (Regex.IsMatch(input, @"^\s*{{each\s"))
+                    if (Regex.IsMatch(input, @"^\s*{{each\s"))
                     {
                         result = Each_start(input);
                     }
@@ -73,10 +68,20 @@ namespace TempTop
                     {
                         result = ElseIf_start(input);
                     }
+                    //else开始
+                    else if (Regex.IsMatch(input, @"^\s*{{else}}\s*$"))
+                    {
+                        result = Else_start();
+                    }
                     //if结束
                     else if (Regex.IsMatch(input, @"^\s*{{/if}}\s*$"))
                     {
                         result = If_end();
+                    }
+                    //表达式输出
+                    else if (Regex.IsMatch(input, @"{{([^/'else']\w+(\[\d\])*)([.]\w+(\[\d\])*)*}}"))
+                    {
+                        result = Output(ConverFormat(input));
                     }
                     //空行
                     else if (Regex.IsMatch(input, @"^\s+$"))
@@ -176,6 +181,11 @@ namespace TempTop
             return builder_result.ToString();
         }
 
+        protected string Else_start()
+        {
+            return "\n}\nelse\n{";
+        }
+
         protected string If_end()
         {
             return "\n}";
@@ -195,7 +205,10 @@ namespace TempTop
 
         private string ExprConvert(string expression)
         {
+            Regex.Match(expression, @"((\w+\[\d+\]?([.]\w+)?)|(\d+([.]\d+)?))(\s[+]|[-]|[*]|\\(\w+\[\d+\]?([.]\w+)?)|(\d+([.]\d+)?))+");
+
             exprBuilder.Clear();
+            if (Regex.IsMatch(expression, @"^\s*\d+([.]\d)?")) return expression;
             var values = expression.Split('.');
 
             exprBuilder.Append(values[0]);

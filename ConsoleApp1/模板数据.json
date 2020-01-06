@@ -1,29 +1,51 @@
 {
   "usings": [
+    "System",
+    "System.Collections.Generic",
     "System.ComponentModel.DataAnnotations",
-    "ConsoleApp1"
+    "System.ComponentModel.DataAnnotations.Schema",
+    "System.Runtime.Serialization",
+    "System.ComponentModel"
   ],
-  "namespace": "ConsoleApp1",
-  "class": "Users",
+  "namespace": "ZxSoftERPSC.Model",
+  "class": "ap_ap",
+  "forkey": [
+    "employee_ee",
+    "settlemode_sm",
+    "syscoin_sc",
+    "vendor_vd"
+  ],
+  "pkforkey": [
+    "apc_apc",
+    "apc2_apc2"
+  ],
   "fields": [
     {
-      "name": "userid",
+      "name": "ap_ccode",
       "type": "string",
+      "default": "string.Empty",
+      "desc": "单号",
       "key": 0
     },
     {
-      "name": "username",
-      "type": "string",
+      "name": "ap_ddate",
+      "type": "Nullable<DateTime>",
+      "default": null,
+      "desc": "日期",
       "key": -1
     },
     {
-      "name": "age",
-      "type": "int",
+      "name": "ee_cid",
+      "type": "string",
+      "default": "string.Empty",
+      "desc": "经手人",
       "key": -1
     },
     {
-      "name": "sex",
+      "name": "vd_cid",
       "type": "string",
+      "default": "string.Empty",
+      "desc": "供应商编码",
       "key": -1
     }
   ]
