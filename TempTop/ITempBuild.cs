@@ -12,6 +12,6 @@ namespace TempTop
         void LoadFromJson(string json);
         void LoadFromObject(object obj);
         string Execute();
-
+        string Execute(object data);
     }
 }
