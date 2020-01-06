@@ -1,12 +1,15 @@
 {{each _data.usings val key}}
 using {{val}};
 {{/each}}
+{{set str = _data.pkforkey[0]}}
+{{set nbr = 100 * 0.1}}
 
 namespace {{_data.@namespace}}
 {
 	public class {{_data.@class}} : ModelBase
 	{
 		{{each _data.fields val key}}
+		{{nbr + key}}{{str + val.desc}}
 		{{if val.key == 0}}
 		[Key]
 		{{else if val.key > 0}}
@@ -16,5 +19,9 @@ namespace {{_data.@namespace}}
 		public {{val.type}} {{val.name}} { get; set; }
 		
 		{{/each}}
+		{{if _data.fields[0].name == "ap_ccode" && 1 == 1}}
+		{{"wyl"}};
+		"王玉林"；
+		{{/if}}
 	}
 }

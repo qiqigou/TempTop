@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace System.Collections.Generic
 {
-    public static class ListExtension
+    internal static class ListExtension
     {
-        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
+        internal static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
         {
             foreach (var item in source)
             {
@@ -17,7 +17,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
+        internal static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
         {
             var index = 0;
             foreach (var item in source)
@@ -27,7 +27,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public static void ForEach<TSource>(this List<TSource> source, Action<TSource, int> action)
+        internal static void ForEach<TSource>(this List<TSource> source, Action<TSource, int> action)
         {
             var index = 0;
             foreach (var item in source)
@@ -37,7 +37,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public static void ForEach(this MatchCollection match, Action<Match, int> action)
+        internal static void ForEach(this MatchCollection match, Action<Match, int> action)
         {
             var index = 0;
             foreach (Match item in match)

@@ -52,7 +52,7 @@
     <Compile Include="ITempBuild.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Analysis.cs" />
-    <Compile Include="TempBase.cs" />
+    <Compile Include="TempBuild.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

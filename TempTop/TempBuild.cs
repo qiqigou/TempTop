@@ -3,18 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TempTop
 {
     /// <summary>
     /// 根据C#代码抽象类
     /// </summary>
-    public abstract class TempBase : ITempBuild
+    public abstract class TempBuild : ITempBuild
     {
-        public readonly StringBuilder builder = new StringBuilder();
+        protected readonly StringBuilder builder = new StringBuilder();
         protected dynamic _data { get; private set; }
 
-        public TempBase() { }
+        public TempBuild() { }
 
         #region 加载data
         public void LoadFromFile(string path)
@@ -42,7 +43,7 @@ namespace TempTop
         /// <returns></returns>
         private string Reader(string path)
         {
-            using (var reader = new StreamReader(path))
+            using (var reader = new StreamReader(path, Encoding.UTF8))
             {
                 return reader.ReadToEnd();
             }
@@ -60,7 +61,10 @@ namespace TempTop
         /// <param name="path"></param>
         protected void Output(string formate, params dynamic[] values)
         {
-            this.builder.AppendLine(string.Format(formate, values));
+            formate = Regex.Replace(formate, @"{(?=[^\d]+})", "{{");
+            formate = Regex.Replace(formate, @"(?<=[^\d]+)}", "}}");
+            this.builder.AppendFormat(formate, values);
+            this.builder.AppendLine();
         }
 
         /// <summary>

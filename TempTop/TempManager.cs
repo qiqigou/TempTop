@@ -31,7 +31,10 @@ namespace TempTop
                 "mscorlib.dll",
                 "Microsoft.CSharp.dll",
             };
-            var assembly = CSharpHelper.GetAssembly(GetCode(), dlls);
+            var ana = new Analysis();
+            var code = ana.Build(builder.ToString());
+
+            var assembly = CSharpHelper.GetAssembly(code, dlls);
 
             return assembly.CreateInstance("TempTop.CreateTemp") as ITempBuild;
         }
@@ -39,7 +42,7 @@ namespace TempTop
         public void LoadFromFile(string path)
         {
             builder.Clear();
-            using (var reader = new StreamReader(path))
+            using (var reader = new StreamReader(path, Encoding.UTF8))
             {
                 builder.Append(reader.ReadToEnd());
             }
@@ -49,12 +52,6 @@ namespace TempTop
         {
             builder.Clear();
             builder.Append(temp);
-        }
-
-        private string GetCode()
-        {
-            var ana = new Analysis();
-            return ana.Build(builder.ToString());
         }
 
     }

@@ -18,9 +18,10 @@ namespace ConsoleApp1
             var tempPath = Path.Combine(@"..\..\", "模板语法.txt");
             var dataPath = Path.Combine(@"..\..\", "模板数据.json");
 
-            var build = new TempManager(tempPath).GetTempBuild();
-            build.LoadFromFile(dataPath);
-            var code = build.Execute();
+            var build = new TempManager(tempPath).GetTempBuild();//编译模板（可复用）
+            build.LoadFromFile(dataPath);//加载数据
+
+            var code = build.Execute();//生成代码
 
             Console.WriteLine(code);
             Console.Read();

@@ -11,7 +11,7 @@ namespace TempTop
     /// <summary>
     /// 将模板解析为C#代码
     /// </summary>
-    public class Analysis
+    internal class Analysis
     {
         protected readonly StringBuilder builder_result = new StringBuilder();
         protected readonly StringBuilder builder_fun1 = new StringBuilder();
@@ -19,12 +19,12 @@ namespace TempTop
         protected readonly StringBuilder builder_fun3 = new StringBuilder();
         protected readonly StringBuilder builder_return = new StringBuilder();
 
-        public string Build(string temp)
+        internal string Build(string temp)
         {
             builder_return.Clear();
             builder_return.Append("namespace TempTop");
             builder_return.Append("{");
-            builder_return.Append("    public class CreateTemp : TempBase");
+            builder_return.Append("    public class CreateTemp : TempBuild");
             builder_return.Append("    {");
             builder_return.Append("        protected override void Invoke()");
             builder_return.Append("        {");
@@ -46,9 +46,13 @@ namespace TempTop
                     var result = string.Empty;
                     var input = reader.ReadLine();
                     if (input == null) break;
-
+                    //声明变量
+                    if (Regex.IsMatch(input, @"^\s*{{set\s+"))
+                    {
+                        result = Set(input);
+                    }
                     //each开始
-                    if (Regex.IsMatch(input, @"^\s*{{each\s"))
+                    else if (Regex.IsMatch(input, @"^\s*{{each\s"))
                     {
                         result = Each_start(input);
                     }
@@ -58,7 +62,7 @@ namespace TempTop
                         result = Each_end(input);
                     }
                     //if开始
-                    else if (Regex.IsMatch(input, @"^\s*{{if\s"))
+                    else if (Regex.IsMatch(input, @"^\s*{{if\s+"))
                     {
                         result = If_start(input);
                     }
@@ -78,9 +82,9 @@ namespace TempTop
                         result = If_end();
                     }
                     //表达式输出
-                    else if (Regex.IsMatch(input, @"{{([^/'else']@?\w+(\[\d\])*)([.]@?\w+(\[\d\])*)*}}"))
+                    else if (Regex.IsMatch(input, @"{{[\s\S]+}}"))
                     {
-                        result = Output(ConverFormat(input));
+                        result = Output(input);
                     }
                     //空行
                     else if (Regex.IsMatch(input, @"^\s+$"))
@@ -98,6 +102,14 @@ namespace TempTop
             return builder_fun3.ToString();
         }
 
+        protected string Set(string input)
+        {
+            ClearResult();
+            var code = Regex.Match(input, @"(?<={{set\s+)([\s\S]*)(?=}})");
+            builder_result.AppendFormat("\nvar {0};", code);
+            return builder_result.ToString();
+        }
+
         protected string Output(string input)
         {
             ClearResult();
@@ -106,7 +118,7 @@ namespace TempTop
             var index = 0;
             do
             {
-                var item = Regex.Match(builder_fun1.ToString(), @"{{@?\w+([.]@?\w+)?}}");
+                var item = Regex.Match(builder_fun1.ToString(), @"{{[^}]+}}");
                 if (!item.Success) break;
 
                 builder_fun1.Remove(item.Index, item.Length);
@@ -118,6 +130,7 @@ namespace TempTop
             } while (true);
 
             builder_result.AppendFormat("\nOutput(\"{0}\"{1});", builder_fun1.Replace("\"", "\\\"").ToString(), builder_fun2.ToString());
+
             return builder_result.ToString();
         }
 
@@ -175,6 +188,7 @@ namespace TempTop
         protected string Append(string input)
         {
             ClearResult();
+            input = input.Replace("\"", "\\\"");
             builder_result.AppendFormat("\nAppend(\"{0}\");", input);
             return builder_result.ToString();
         }
