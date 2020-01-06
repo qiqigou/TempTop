@@ -115,5 +115,11 @@ namespace TempTop
             return this.Execute();
         }
 
+        public string Execute(string json)
+        {
+            this.LoadFromJson(json);
+            return this.Execute();
+        }
+
     }
 }
