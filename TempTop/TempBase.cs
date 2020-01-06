@@ -12,7 +12,7 @@ namespace TempTop
     /// </summary>
     public abstract class TempBase : ITempBuild
     {
-        public StringBuilder builder { get; } = new StringBuilder();
+        public readonly StringBuilder builder = new StringBuilder();
         protected JObject _data { get; private set; }
 
         public TempBase() { }
@@ -69,7 +69,7 @@ namespace TempTop
         /// 追加文本
         /// </summary>
         /// <param name="value"></param>
-        protected void Append(string value = default)
+        protected void Append(string value = "")
         {
             this.builder.AppendLine(value);
         }

@@ -13,12 +13,12 @@ namespace TempTop
     /// </summary>
     public class Analysis
     {
-        protected StringBuilder exprBuilder { get; } = new StringBuilder();
-        protected StringBuilder builder_result { get; } = new StringBuilder();
-        protected StringBuilder builder_fun1 { get; } = new StringBuilder();
-        protected StringBuilder builder_fun2 { get; } = new StringBuilder();
-        protected StringBuilder builder_fun3 { get; } = new StringBuilder();
-        protected StringBuilder builder_return { get; } = new StringBuilder();
+        protected readonly StringBuilder exprBuilder = new StringBuilder();
+        protected readonly StringBuilder builder_result = new StringBuilder();
+        protected readonly StringBuilder builder_fun1 = new StringBuilder();
+        protected readonly StringBuilder builder_fun2 = new StringBuilder();
+        protected readonly StringBuilder builder_fun3 = new StringBuilder();
+        protected readonly StringBuilder builder_return = new StringBuilder();
 
         public string Build(string temp)
         {

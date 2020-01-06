@@ -32,7 +32,8 @@ namespace ConsoleApp1
             build.LoadFromFile(data);
             var code = build.Execute();
             var dlls = new string[] {
-                "System.ComponentModel.DataAnnotations.dll"
+                "System.ComponentModel.DataAnnotations.dll",
+                "ConsoleApp1.exe"
             };
 
             return CSharpHelper.GetAssembly(code, dlls);

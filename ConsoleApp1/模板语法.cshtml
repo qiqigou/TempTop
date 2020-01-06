@@ -4,7 +4,7 @@ using {{val}};
 
 namespace {{_data.namespace}}
 {
-	public class {{_data.class}}
+	public class {{_data.class}} : ModelBase
 	{
 		{{each _data.fields val key}}
 		{{if val.key == 0}}

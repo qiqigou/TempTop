@@ -8,7 +8,7 @@ namespace TempTop
     {
         public static Assembly GetAssembly(string code, params string[] dlls)
         {
-            Assembly assembly = default;
+            Assembly assembly = null;
             using (var complier = new CSharpCodeProvider())
             {
                 var dll = new CompilerParameters();
