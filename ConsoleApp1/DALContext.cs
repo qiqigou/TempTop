@@ -18,11 +18,11 @@ namespace ConsoleApp1
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Configurations.AddFromAssembly(Program.Assembly);
-            Type type = Program.Assembly.GetType("ConsoleApp1.Users");
+            //Type type = Program.Assembly.GetType("ConsoleApp1.Users");
             //var obj = new EntityTypeConfiguration<Users>();
 
-            var obj = GetEntityType(type);
-            modelBuilder.Configurations.Add(obj);
+            //var obj = GetEntityType(type);
+            //modelBuilder.Configurations.Add(obj);
             base.OnModelCreating(modelBuilder);
         }
 

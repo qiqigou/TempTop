@@ -20,7 +20,9 @@ namespace TempTop
                 "System.dll",
                 "NewTonsoft.Json.dll",
                 "TempTop.dll",
-                "System.Core.dll"
+                "System.Core.dll",
+                "mscorlib.dll",
+                "Microsoft.CSharp.dll",
             };
             var assembly = CSharpHelper.GetAssembly(GetCode(), dlls);
 

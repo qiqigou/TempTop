@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace TempTop
@@ -13,7 +12,7 @@ namespace TempTop
     public abstract class TempBase : ITempBuild
     {
         public readonly StringBuilder builder = new StringBuilder();
-        protected JObject _data { get; private set; }
+        protected dynamic _data { get; private set; }
 
         public TempBase() { }
 
@@ -59,9 +58,8 @@ namespace TempTop
         /// <param name="token"></param>
         /// <param name="formate"></param>
         /// <param name="path"></param>
-        protected void Output(string formate, params JToken[] values)
+        protected void Output(string formate, params dynamic[] values)
         {
-            var strs = values.Select(x => x.Value<string>()).ToArray();
             this.builder.AppendLine(string.Format(formate, values));
         }
 
@@ -79,45 +77,9 @@ namespace TempTop
         /// </summary>
         /// <param name="jsonpath"></param>
         /// <param name="action"></param>
-        protected void Each(JToken token, Action<JToken, int> action)
+        protected void Each(JToken token, Action<dynamic, int> action)
         {
             token.ForEach(action);
-        }
-
-        /// <summary>
-        /// 比较
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        protected bool Compare(object obj1, string sign, object obj2)
-        {
-            bool result = false;
-            JToken token1 = JToken.FromObject(obj1);
-            JToken token2 = JToken.FromObject(obj2);
-            switch (sign)
-            {
-                case "!=":
-                    result = token1.ToString() != token2.ToString();
-                    break;
-                case "==":
-                    result = token1.ToString() == token2.ToString();
-                    break;
-                case "<=":
-                    result = Convert.ToDecimal(token1) <= Convert.ToDecimal(token2);
-                    break;
-                case ">=":
-                    result = Convert.ToDecimal(token1) >= Convert.ToDecimal(token2);
-                    break;
-                case "<":
-                    result = Convert.ToDecimal(token1) < Convert.ToDecimal(token2);
-                    break;
-                case ">":
-                    result = Convert.ToDecimal(token1) > Convert.ToDecimal(token2);
-                    break;
-                default:
-                    break;
-            }
-            return result;
         }
 
         /// <summary>

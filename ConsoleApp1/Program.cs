@@ -13,16 +13,10 @@ namespace ConsoleApp1
 {
     class Program
     {
-        public static Assembly Assembly;
-
-        /// <summary>
-        /// 取得Model程序集
-        /// </summary>
-        /// <returns></returns>
-        public static Assembly GetAssembly()
+        public static string GetCode()
         {
             //var baseUrl = Directory.GetCurrentDirectory();
-            var temp = Path.Combine(@"..\..\", "模板语法.cshtml");
+            var temp = Path.Combine(@"..\..\", "模板语法.txt");
             var data = Path.Combine(@"..\..\", "模板数据.json");
 
             var manager = new TempManager();
@@ -31,27 +25,30 @@ namespace ConsoleApp1
 
             build.LoadFromFile(data);
             var code = build.Execute();
-            var dlls = new string[] {
-                "System.ComponentModel.DataAnnotations.dll",
-                "ConsoleApp1.exe"
-            };
 
-            return CSharpHelper.GetAssembly(code, dlls);
+            //var dlls = new string[] {
+            //    "System.ComponentModel.DataAnnotations.dll",
+            //    "ConsoleApp1.exe"
+            //};
+
+            return code;
         }
 
         static void Main(string[] args)
         {
-            Assembly = GetAssembly();
-            Type type = Assembly.GetType("ConsoleApp1.Users");
+            //Assembly = GetAssembly();
+            //Type type = Assembly.GetType("ConsoleApp1.Users");
 
-            var helper = new DBHelper();
-            using (var db = new DALContext())
-            {
-                var list = helper.Filter(db, type, "userid=\"100\"");
+            //var helper = new DBHelper();
+            //using (var db = new DALContext())
+            //{
+            //    //var list = helper.Filter(db, type, "userid=\"100\"");
 
-                var json = JsonConvert.SerializeObject(list, Formatting.Indented);
-                Console.WriteLine(json);
-            }
+            //    var json = JsonConvert.SerializeObject(list, Formatting.Indented);
+            //    Console.WriteLine(json);
+            //}
+            var code = GetCode();
+            Console.WriteLine(code);
             Console.Read();
         }
 

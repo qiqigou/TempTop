@@ -13,7 +13,6 @@ namespace TempTop
     /// </summary>
     public class Analysis
     {
-        protected readonly StringBuilder exprBuilder = new StringBuilder();
         protected readonly StringBuilder builder_result = new StringBuilder();
         protected readonly StringBuilder builder_fun1 = new StringBuilder();
         protected readonly StringBuilder builder_fun2 = new StringBuilder();
@@ -79,7 +78,7 @@ namespace TempTop
                         result = If_end();
                     }
                     //表达式输出
-                    else if (Regex.IsMatch(input, @"{{([^/'else']\w+(\[\d\])*)([.]\w+(\[\d\])*)*}}"))
+                    else if (Regex.IsMatch(input, @"{{([^/'else']@?\w+(\[\d\])*)([.]@?\w+(\[\d\])*)*}}"))
                     {
                         result = Output(ConverFormat(input));
                     }
@@ -107,13 +106,13 @@ namespace TempTop
             var index = 0;
             do
             {
-                var item = Regex.Match(builder_fun1.ToString(), @"{{\w+([.]\w+)?}}");
+                var item = Regex.Match(builder_fun1.ToString(), @"{{@?\w+([.]@?\w+)?}}");
                 if (!item.Success) break;
 
                 builder_fun1.Remove(item.Index, item.Length);
                 builder_fun1.Insert(item.Index, string.Format("{{{0}}}", index));
 
-                var vl = ExprConvert(item.Value.Replace("{{", "").Replace("}}", ""));
+                var vl = item.Value.Replace("{{", "").Replace("}}", "");
                 builder_fun2.AppendFormat("{0} {1}", ",", vl);
                 index++;
             } while (true);
@@ -125,39 +124,30 @@ namespace TempTop
         protected string Each_start(string input)
         {
             ClearResult();
-            var ehval_str = Regex.Match(input, @"(?<={{each\s)(\w+([.]\w+)?)").Value;
-            var ehval = ExprConvert(ehval_str);
+            var group = Regex.Match(input, @"(?<={{each\s+)(?<data>@?[\w.\[\]0-9]+)\s+(?<val>\w+)\s+(?<key>\w+)?").Groups;
+            var data = group["data"].Value;
+            var val = group["val"].Value;
+            var key = group["key"].Value;
 
-            var valkey_str = Regex.Match(input, @"(?<={{each\s[\w.]+\s)(\w+(\s\w+)?)").Value;
-            var valkeys = valkey_str.Split(' ');
-            var val = valkeys[0];
-            var key = valkeys[1];
+            var format = "\nEach({0}, (System.Action<dynamic, int>)(({1}, {2}) =>";
+            if (string.IsNullOrWhiteSpace(key)) format = "\nEach({0}, (System.Action<dynamic, int>)(({1}) =>";
 
-            builder_result.AppendFormat("\nEach({0}, ({1}, {2}) =>", ehval, val, key);
+            builder_result.AppendFormat(format, data, val, key);
             builder_result.Append("\n{");
             return builder_result.ToString();
         }
 
         protected string Each_end(string input)
         {
-            return "\n});";
+            return "\n}));";
         }
 
         protected string If_start(string input)
         {
             ClearResult();
             builder_result.Append("\nif (");
-            var str1 = Regex.Match(input, @"(?<={{if)[\s\S]*(?=}})").Value;
-            var loji = Regex.Matches(str1, "&&|\\|\\|").GetEnumerator();
-            var sign = Regex.Matches(str1, @"<=|>=|<|>|!=|==").GetEnumerator();
-
-            var list = str1.Split(new string[] { "&&", "||" }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(new string[] { "<=", ">=", "<", ">", "!=", "==" }, StringSplitOptions.RemoveEmptyEntries));
-
-            list.ForEach((item, index) =>
-            {
-                builder_result.AppendFormat("Compare({0}, \"{1}\", {2}) {3} ", ExprConvert(item[0].Trim()), Next(sign).Trim(), ExprConvert(item[1].Trim()), Next(loji).Trim());
-            });
-            builder_result.Remove(builder_result.Length - 2, 2);
+            var code = Regex.Match(input, @"(?<={{if)[\s\S]*(?=}})").Value;
+            builder_result.Append(code);
             builder_result.Append(")\n{");
             return builder_result.ToString();
         }
@@ -166,17 +156,8 @@ namespace TempTop
         {
             ClearResult();
             builder_result.Append("\n}\nelse if (");
-            var str1 = Regex.Match(input, @"(?<={{else if)[\s\S]*(?=}})").Value;
-            var loji = Regex.Matches(str1, "&&|\\|\\|").GetEnumerator();
-            var sign = Regex.Matches(str1, @"<=|>=|<|>|!=|==").GetEnumerator();
-
-            var list = str1.Split(new string[] { "&&", "||" }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(new string[] { "<=", ">=", "<", ">", "!=", "==" }, StringSplitOptions.RemoveEmptyEntries));
-
-            list.ForEach((item, index) =>
-            {
-                builder_result.AppendFormat("Compare({0}, \"{1}\", {2}) {3} ", ExprConvert(item[0].Trim()), Next(sign).Trim(), ExprConvert(item[1].Trim()), Next(loji).Trim());
-            });
-            builder_result.Remove(builder_result.Length - 2, 2);
+            var code = Regex.Match(input, @"(?<={{else if)[\s\S]*(?=}})").Value;
+            builder_result.Append(code);
             builder_result.Append(")\n{");
             return builder_result.ToString();
         }
@@ -203,32 +184,6 @@ namespace TempTop
             return "\nAppend();";
         }
 
-        private string ExprConvert(string expression)
-        {
-            Regex.Match(expression, @"((\w+\[\d+\]?([.]\w+)?)|(\d+([.]\d+)?))(\s[+]|[-]|[*]|\\(\w+\[\d+\]?([.]\w+)?)|(\d+([.]\d+)?))+");
-
-            exprBuilder.Clear();
-            if (Regex.IsMatch(expression, @"^\s*\d+([.]\d)?")) return expression;
-            var values = expression.Split('.');
-
-            exprBuilder.Append(values[0]);
-            for (int i = 1; i < values.Length; i++)
-            {
-                if (Regex.IsMatch(values[i], @"^\w+\[\d+\]$"))
-                {
-                    var start = Regex.Match(values[i], @"\w+").Value;
-                    var end = Regex.Match(values[i], @"\[\d+\]").Value;
-                    exprBuilder.AppendFormat("[\"{0}\"]", start, end);
-                }
-                else
-                {
-                    exprBuilder.AppendFormat("[\"{0}\"]", values[i]);
-                }
-            }
-            return exprBuilder.ToString();
-        }
-
-
         private void ClearResult()
         {
             builder_result.Clear();
@@ -236,6 +191,11 @@ namespace TempTop
             builder_fun2.Clear();
         }
 
+        /// <summary>
+        /// 括号转换
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         private string ConverFormat(string input)
         {
             var mt = Regex.Match(input, @"(?<!{)({)(?!{)");

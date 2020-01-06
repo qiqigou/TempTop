@@ -2,9 +2,9 @@
 using {{val}};
 {{/each}}
 
-namespace {{_data.namespace}}
+namespace {{_data.@namespace}}
 {
-	public class {{_data.class}} : ModelBase
+	public class {{_data.@class}} : ModelBase
 	{
 		{{each _data.fields val key}}
 		{{if val.key == 0}}
@@ -12,7 +12,6 @@ namespace {{_data.namespace}}
 		{{else if val.key > 0}}
 		[Key, Column(Order = {{val.key}})]
         {{else}}
-        {{key}}哈哈哈哈哈
 		{{/if}}
 		public {{val.type}} {{val.name}} { get; set; }
 		
