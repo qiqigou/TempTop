@@ -61,8 +61,8 @@ namespace TempTop
         /// <param name="path"></param>
         protected void Output(string formate, params dynamic[] values)
         {
-            formate = Regex.Replace(formate, @"{(?=[^\d]+})", "{{");
-            formate = Regex.Replace(formate, @"(?<=[^\d]+)}", "}}");
+            formate = Regex.Replace(formate, @"(?<!{){(?!{|(\s*\d+\s*))", "{{");
+            formate = Regex.Replace(formate, @"(?<!}|(\s*\d+\s*))}(?!})", "}}");
             this.builder.AppendFormat(formate, values);
             this.builder.AppendLine();
         }

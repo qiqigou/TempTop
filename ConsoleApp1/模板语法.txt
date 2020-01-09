@@ -3,6 +3,7 @@ using {{val}};
 {{/each}}
 {{set str = _data.pkforkey[0]}}
 {{set nbr = 100 * 0.1}}
+{{set msg = "{0}"}}
 
 namespace {{_data.@namespace}}
 {
@@ -16,10 +17,11 @@ namespace {{_data.@namespace}}
 		[Key, Column(Order = {{val.key}})]
         {{else}}
 		{{/if}}
-		public {{val.type}} {{val.name}} { get; set; }
+		public {{{{val.type}}}} {{val.name}} { get; set; } {{msg}}
 		
 		{{/each}}
 		{{if _data.fields[0].name == "ap_ccode" && 1 == 1}}
+		{{nbr = 100}}
 		{{"wyl"}};
 		"王玉林"；
 		{{/if}}

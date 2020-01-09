@@ -10,6 +10,8 @@
             }));
             var str = _data.pkforkey[0];
             var nbr = 100 * 0.1;
+            var msg = "{0}";
+            Append("");
             Output("namespace {0}", _data.@namespace);
             Append("{");
             Output("	public class {0} : ModelBase", _data.@class);
@@ -28,13 +30,14 @@
                 else
                 {
                 }
-                Output("		public {0} {1} { get; set; }", val.type, val.name);
+                Output("		public {{{0}}} {1} { get; set; } {2}", val.type, val.name, msg);
                 Append();
             }));
             if (_data.fields[0].name == "ap_ccode" && 1 == 1)
             {
+                Output("		{0}", nbr = 100);
                 Output("		{0};", "wyl");
-                Append("		\"������\"��");
+                Append("		\"王玉林\"；");
             }
             Append("	}");
             Append("}");

@@ -47,49 +47,49 @@ namespace TempTop
                     var input = reader.ReadLine();
                     if (input == null) break;
                     //声明变量
-                    if (Regex.IsMatch(input, @"^\s*{{set\s+"))
+                    if (Regex.IsMatch(input, @"^\s*{{set\s+((?!{{|}}).)+}}\s*$"))
                     {
                         result = Set(input);
                     }
                     //each开始
-                    else if (Regex.IsMatch(input, @"^\s*{{each\s"))
+                    else if (Regex.IsMatch(input, @"^\s*{{each\s+((?!{{|}}).)+}}\s*$"))
                     {
                         result = Each_start(input);
                     }
                     //each结束
                     else if (Regex.IsMatch(input, @"^\s*{{/each}}\s*$"))
                     {
-                        result = Each_end(input);
+                        result = "\n}));";
                     }
                     //if开始
-                    else if (Regex.IsMatch(input, @"^\s*{{if\s+"))
+                    else if (Regex.IsMatch(input, @"^\s*{{if\s+((?!{{|}}).)+}}\s*$"))
                     {
                         result = If_start(input);
                     }
                     //else if 开始
-                    else if (Regex.IsMatch(input, @"^\s*{{else\sif\s"))
+                    else if (Regex.IsMatch(input, @"^\s*{{else\s+if\s+((?!{{|}}).)+}}\s*$"))
                     {
                         result = ElseIf_start(input);
                     }
                     //else开始
                     else if (Regex.IsMatch(input, @"^\s*{{else}}\s*$"))
                     {
-                        result = Else_start();
+                        result = "\n}\nelse\n{";
                     }
                     //if结束
                     else if (Regex.IsMatch(input, @"^\s*{{/if}}\s*$"))
                     {
-                        result = If_end();
+                        result = "\n}";
                     }
                     //表达式输出
-                    else if (Regex.IsMatch(input, @"{{[\s\S]+}}"))
+                    else if (Regex.IsMatch(input, @"({{((?!{{|}}).)+}})+"))
                     {
                         result = Output(input);
                     }
                     //空行
                     else if (Regex.IsMatch(input, @"^\s+$"))
                     {
-                        result = Empty();
+                        result = "\nAppend();";
                     }
                     //无表达式追加
                     else
@@ -105,7 +105,7 @@ namespace TempTop
         protected string Set(string input)
         {
             ClearResult();
-            var code = Regex.Match(input, @"(?<={{set\s+)([\s\S]*)(?=}})");
+            var code = Regex.Match(input, @"(?<={{set\s+)((?!{{|}}).)+");
             builder_result.AppendFormat("\nvar {0};", code);
             return builder_result.ToString();
         }
@@ -113,22 +113,21 @@ namespace TempTop
         protected string Output(string input)
         {
             ClearResult();
-            builder_fun1.Append(input);
 
             var index = 0;
-            do
-            {
-                var item = Regex.Match(builder_fun1.ToString(), @"{{[^}]+}}");
-                if (!item.Success) break;
+            var startindex = 0;
+            var mhs = Regex.Matches(input, @"{{[^{]((?!{{|}}).)+}}");
 
-                builder_fun1.Remove(item.Index, item.Length);
-                builder_fun1.Insert(item.Index, string.Format("{{{0}}}", index));
+            foreach (Match item in mhs)
+            {
+                builder_fun1.Append(input.Substring(startindex, item.Index - startindex));
+                builder_fun1.AppendFormat("{{{0}}}", index++);
+                startindex = item.Index + item.Length;
 
                 var vl = item.Value.Replace("{{", "").Replace("}}", "");
                 builder_fun2.AppendFormat("{0} {1}", ",", vl);
-                index++;
-            } while (true);
-
+            }
+            builder_fun1.Append(input.Substring(startindex));
             builder_result.AppendFormat("\nOutput(\"{0}\"{1});", builder_fun1.Replace("\"", "\\\"").ToString(), builder_fun2.ToString());
 
             return builder_result.ToString();
@@ -150,16 +149,11 @@ namespace TempTop
             return builder_result.ToString();
         }
 
-        protected string Each_end(string input)
-        {
-            return "\n}));";
-        }
-
         protected string If_start(string input)
         {
             ClearResult();
             builder_result.Append("\nif (");
-            var code = Regex.Match(input, @"(?<={{if)[\s\S]*(?=}})").Value;
+            var code = Regex.Match(input, @"(?<={{if\s+)((?!{{|}}).)+").Value;
             builder_result.Append(code);
             builder_result.Append(")\n{");
             return builder_result.ToString();
@@ -169,20 +163,10 @@ namespace TempTop
         {
             ClearResult();
             builder_result.Append("\n}\nelse if (");
-            var code = Regex.Match(input, @"(?<={{else if)[\s\S]*(?=}})").Value;
+            var code = Regex.Match(input, @"(?<={{else if\s+)((?!{{|}}).)+").Value;
             builder_result.Append(code);
             builder_result.Append(")\n{");
             return builder_result.ToString();
-        }
-
-        protected string Else_start()
-        {
-            return "\n}\nelse\n{";
-        }
-
-        protected string If_end()
-        {
-            return "\n}";
         }
 
         protected string Append(string input)
@@ -193,10 +177,6 @@ namespace TempTop
             return builder_result.ToString();
         }
 
-        protected string Empty()
-        {
-            return "\nAppend();";
-        }
 
         private void ClearResult()
         {
@@ -205,28 +185,6 @@ namespace TempTop
             builder_fun2.Clear();
         }
 
-        /// <summary>
-        /// 括号转换
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private string ConverFormat(string input)
-        {
-            var mt = Regex.Match(input, @"(?<!{)({)(?!{)");
-
-            var str = Regex.Replace(input, @"(?<!{)({)(?!{)", "{{");
-            return Regex.Replace(str, @"(?<!})(})(?!})", "}}");
-        }
-
-        private string Next(IEnumerator enumerator)
-        {
-            var result = string.Empty;
-            if (enumerator.MoveNext())
-            {
-                result = enumerator.Current.ToString();
-            }
-            return result;
-        }
     }
 
 }
