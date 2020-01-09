@@ -51,6 +51,11 @@ namespace TempTop
                     {
                         result = Set(input);
                     }
+                    //变量赋值
+                    else if (Regex.IsMatch(input, @"^\s*{{\s*[\w.\[\]]+\s*=[\s\S]+}}$"))
+                    {
+                        result = Assignment(input);
+                    }
                     //each开始
                     else if (Regex.IsMatch(input, @"^\s*{{each\s+((?!{{|}}).)+}}\s*$"))
                     {
@@ -107,6 +112,14 @@ namespace TempTop
             ClearResult();
             var code = Regex.Match(input, @"(?<={{set\s+)[\s\S]+(?=}})");
             builder_result.AppendFormat("\nvar {0};", code);
+            return builder_result.ToString();
+        }
+
+        protected string Assignment(string input)
+        {
+            ClearResult();
+            var code = Regex.Match(input, @"(?<={{\s*)[\w.\[\]]+\s*=[\s\S]+(?=\s*}})");
+            builder_result.AppendFormat("\n{0};", code);
             return builder_result.ToString();
         }
 

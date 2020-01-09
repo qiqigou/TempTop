@@ -35,7 +35,7 @@
             }));
             if (_data.fields[0].name == "ap_ccode" && 1 == 1)
             {
-                Output("		{0}", nbr = 100);
+                nbr = 100;
                 Output("		{0};", "wyl");
                 if ("}}" == "}}")
                 {
