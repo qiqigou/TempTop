@@ -3,7 +3,7 @@ using {{val}};
 {{/each}}
 {{set str = _data.pkforkey[0]}}
 {{set nbr = 100 * 0.1}}
-{{set msg = "{0}"}}
+{{set msg = "{{0}}"}}
 
 namespace {{_data.@namespace}}
 {
@@ -23,6 +23,9 @@ namespace {{_data.@namespace}}
 		{{if _data.fields[0].name == "ap_ccode" && 1 == 1}}
 		{{nbr = 100}}
 		{{"wyl"}};
+		{{if "}}" == "}}"}}
+		"wodddddd"
+		{{/if}}
 		"王玉林"；
 		{{/if}}
 	}

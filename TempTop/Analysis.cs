@@ -47,7 +47,7 @@ namespace TempTop
                     var input = reader.ReadLine();
                     if (input == null) break;
                     //声明变量
-                    if (Regex.IsMatch(input, @"^\s*{{set\s+((?!{{|}}).)+}}\s*$"))
+                    if (Regex.IsMatch(input, @"^\s*{{set\s+[\s\S]+}}\s*$"))
                     {
                         result = Set(input);
                     }
@@ -62,12 +62,12 @@ namespace TempTop
                         result = "\n}));";
                     }
                     //if开始
-                    else if (Regex.IsMatch(input, @"^\s*{{if\s+((?!{{|}}).)+}}\s*$"))
+                    else if (Regex.IsMatch(input, @"^\s*{{if\s+[\s\S]+}}\s*$"))
                     {
                         result = If_start(input);
                     }
                     //else if 开始
-                    else if (Regex.IsMatch(input, @"^\s*{{else\s+if\s+((?!{{|}}).)+}}\s*$"))
+                    else if (Regex.IsMatch(input, @"^\s*{{else\s+if\s+[\s\S]+}}\s*$"))
                     {
                         result = ElseIf_start(input);
                     }
@@ -82,7 +82,7 @@ namespace TempTop
                         result = "\n}";
                     }
                     //表达式输出
-                    else if (Regex.IsMatch(input, @"({{((?!{{|}}).)+}})+"))
+                    else if (Regex.IsMatch(input, "({{[^{](((?!{{|}}).)+)}})+"))
                     {
                         result = Output(input);
                     }
@@ -105,7 +105,7 @@ namespace TempTop
         protected string Set(string input)
         {
             ClearResult();
-            var code = Regex.Match(input, @"(?<={{set\s+)((?!{{|}}).)+");
+            var code = Regex.Match(input, @"(?<={{set\s+)[\s\S]+(?=}})");
             builder_result.AppendFormat("\nvar {0};", code);
             return builder_result.ToString();
         }
@@ -153,7 +153,7 @@ namespace TempTop
         {
             ClearResult();
             builder_result.Append("\nif (");
-            var code = Regex.Match(input, @"(?<={{if\s+)((?!{{|}}).)+").Value;
+            var code = Regex.Match(input, @"(?<={{if\s+)[\s\S]+(?=}})\s*").Value;
             builder_result.Append(code);
             builder_result.Append(")\n{");
             return builder_result.ToString();
@@ -163,7 +163,7 @@ namespace TempTop
         {
             ClearResult();
             builder_result.Append("\n}\nelse if (");
-            var code = Regex.Match(input, @"(?<={{else if\s+)((?!{{|}}).)+").Value;
+            var code = Regex.Match(input, @"(?<={{else if\s+)[\s\S]+(?=}})\s*").Value;
             builder_result.Append(code);
             builder_result.Append(")\n{");
             return builder_result.ToString();
