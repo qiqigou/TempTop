@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>TempTop</id>
+    <version>1.0.0.0</version>
+    <title>TempTop</title>
+    <authors>qiqigou</authors>
+    <owners>qiqigou</owners>
+    <licenseUrl>https://www.onlyoned.com</licenseUrl>
+    <projectUrl>https://www.onlyoned.com</projectUrl>
+    <iconUrl>https://www.onlyoned.com</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>基于C# .net 4.7模板引擎</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>代码生成器 模板引擎</tags>
+  </metadata>
+</package>
