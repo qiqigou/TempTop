@@ -1,6 +1,7 @@
 ﻿using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
+using System.Text;
 
 namespace TempTop
 {
@@ -8,7 +9,6 @@ namespace TempTop
     {
         public static Assembly GetAssembly(string[] dlls, params string[] code)
         {
-            Assembly assembly = null;
             using (var complier = new CSharpCodeProvider())
             {
                 var dll = new CompilerParameters();
@@ -18,11 +18,18 @@ namespace TempTop
 
                 var cr = complier.CompileAssemblyFromSource(dll, code);
                 var error = cr.Errors.HasErrors;
-                if (error == false)
+
+                if (error)
                 {
-                    assembly = cr.CompiledAssembly;
+                    var sb = new StringBuilder();
+                    foreach (var item in cr.Errors)
+                    {
+                        System.Console.WriteLine(item.GetType());
+                    }
+                    throw new System.Exception(sb.ToString());
                 }
-                return assembly;
+
+                return cr.CompiledAssembly;
             }
         }
 
