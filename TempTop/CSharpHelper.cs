@@ -22,9 +22,9 @@ namespace TempTop
                 if (error)
                 {
                     var sb = new StringBuilder();
-                    foreach (var item in cr.Errors)
+                    foreach (CompilerError item in cr.Errors)
                     {
-                        System.Console.WriteLine(item.GetType());
+                        sb.AppendLine(item.ToString());
                     }
                     throw new System.Exception(sb.ToString());
                 }
