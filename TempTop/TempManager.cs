@@ -23,18 +23,21 @@ namespace TempTop
 
         public ITempBuild GetTempBuild()
         {
+            var nowdll = Assembly.GetExecutingAssembly().Location;
+            var newtonsoft = Assembly.Load("Newtonsoft.Json").Location;
+
             var dlls = new string[] {
                 "System.dll",
-                "NewTonsoft.Json.dll",
-                "TempTop.dll",
                 "System.Core.dll",
                 "mscorlib.dll",
                 "Microsoft.CSharp.dll",
+                newtonsoft,
+                nowdll,
             };
             var ana = new Analysis();
             var code = ana.Build(builder.ToString());
 
-            var assembly = CSharpHelper.GetAssembly(code, dlls);
+            var assembly = CSharpHelper.GetAssembly(dlls, code);
 
             return assembly.CreateInstance("TempTop.CreateTemp") as ITempBuild;
         }

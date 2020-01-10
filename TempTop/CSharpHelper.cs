@@ -6,7 +6,7 @@ namespace TempTop
 {
     public class CSharpHelper
     {
-        public static Assembly GetAssembly(string code, params string[] dlls)
+        public static Assembly GetAssembly(string[] dlls, params string[] code)
         {
             Assembly assembly = null;
             using (var complier = new CSharpCodeProvider())
