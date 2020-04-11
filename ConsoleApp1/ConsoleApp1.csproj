@@ -99,12 +99,6 @@
     <Content Include="模板语法.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TempTop\TempTop.csproj">
-      <Project>{3325676e-14a3-4bca-b4a1-63a8fd979e09}</Project>
-      <Name>TempTop</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.6 %28x86 和 x64%29</ProductName>
@@ -115,6 +109,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\ClassLibrary1.csproj">
+      <Project>{3c7550aa-97fd-4075-8052-0fe6ee011f6d}</Project>
+      <Name>ClassLibrary1</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

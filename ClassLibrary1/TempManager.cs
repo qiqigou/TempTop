@@ -1,14 +1,10 @@
-﻿using Microsoft.CSharp;
-using System;
-using System.CodeDom.Compiler;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace TempTop
+namespace ClassLibrary1
 {
     public class TempManager
     {
@@ -21,26 +17,23 @@ namespace TempTop
             this.LoadFromFile(path);
         }
 
-        public ITempBuild GetTempBuild(params string[] pardlls)
+        public ITempBuild GetTempBuild()
         {
-            var dlls = new List<string>
-            {
+            var nowdll = Assembly.GetExecutingAssembly().Location;
+            var newtonsoft = Assembly.Load("Newtonsoft.Json").Location;
+
+            var dlls = new string[] {
                 "System.dll",
                 "System.Core.dll",
                 "mscorlib.dll",
                 "Microsoft.CSharp.dll",
+                newtonsoft,
+                nowdll,
             };
-            if (pardlls == null || pardlls.Length == 0)
-            {
-                var nowdll = Assembly.GetExecutingAssembly().Location;
-                var newtonsoft = Assembly.Load("Newtonsoft.Json").Location;
-                dlls.Add(nowdll);
-                dlls.Add(newtonsoft);
-            }
             var ana = new Analysis();
             var code = ana.Build(builder.ToString());
 
-            var assembly = CSharpHelper.GetAssembly(dlls.ToArray(), code);
+            var assembly = CSharpHelper.GetAssembly(dlls, code);
 
             return assembly.CreateInstance("TempTop.CreateTemp") as ITempBuild;
         }
